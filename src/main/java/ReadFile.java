@@ -6,24 +6,60 @@ import java.util.ArrayList;
 
 public class ReadFile {
     private ArrayList<String> lines;
-    public ArrayList<String> getLines() { return lines; }
+
+    public ArrayList<String> getLines() {
+        return lines;
+    }
+
+    public ArrayList<Paragraph> getParagraphs() {
+        ArrayList<Paragraph> paragraphs = new ArrayList<>();
+
+        Paragraph currentParagraph = new Paragraph();
+
+        for (String line : lines) {
+
+            if (line.trim().isEmpty()) {
+                if (!currentParagraph.getWords().isEmpty()) {
+                    paragraphs.add(currentParagraph);
+                    currentParagraph = new Paragraph();
+                }
+            } else {
+                currentParagraph.addWords(line);
+            }
+        }
+
+        if (!currentParagraph.getWords().isEmpty()) {
+            paragraphs.add(currentParagraph);
+        }
+
+        return paragraphs;
+    }
+
     public Boolean doReadFile(String fname) {
         lines = new ArrayList<>();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(fname))) {
             String line;
+
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
             }
+
             return true;
+
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }
+
         return false;
     }
+
     private ReadFile() {}
+
     public ReadFile(String fname) throws FileNotFoundException {
         if (!doReadFile(fname)) {
             throw new FileNotFoundException("Error reading file: " + fname);
         }
     }
 }
+

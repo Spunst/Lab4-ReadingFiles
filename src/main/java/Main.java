@@ -6,11 +6,10 @@ public class Main {
     public static void main(String[] args) {
         try {
             ReadFile fileRes = new ReadFile("data/GettysburgAddress.txt");
-            ArrayList<String> lines = fileRes.getLines();
-            int linenum = 1;
-            for (String line: lines) {
-                System.out.println(linenum + ": " + line);
-                linenum++;
+            ArrayList<Paragraph> paragraphs = fileRes.getParagraphs();
+
+            for (Paragraph paragraph : paragraphs) {
+                paragraph.printParagraph();
             }
         }
         catch (Exception e) {
